@@ -8,8 +8,11 @@ var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 builder.WebHost.UseUrls($"http://+:{port}");
 
 // Add services to the container.
+var connectionString = ParseConnectionString(
+    builder.Configuration.GetConnectionString("DefaultConnection")!);
+
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(connectionString));
 
 builder.Services.AddRazorPages();
 
@@ -42,3 +45,19 @@ app.MapRazorPages()
    .WithStaticAssets();
 
 app.Run();
+
+// Converts postgresql://user:pass@host/db?sslmode=require  →  Npgsql ADO.NET format
+static string ParseConnectionString(string connStr)
+{
+    if (!connStr.StartsWith("postgres://") && !connStr.StartsWith("postgresql://"))
+        return connStr;
+
+    var uri = new Uri(connStr);
+    var userInfo = uri.UserInfo.Split(':', 2);
+    var username = Uri.UnescapeDataString(userInfo[0]);
+    var password = userInfo.Length > 1 ? Uri.UnescapeDataString(userInfo[1]) : "";
+    var port = uri.Port > 0 ? uri.Port : 5432;
+    var database = uri.AbsolutePath.TrimStart('/');
+
+    return $"Host={uri.Host};Port={port};Database={database};Username={username};Password={password};SSL Mode=Require;Trust Server Certificate=true;";
+}
