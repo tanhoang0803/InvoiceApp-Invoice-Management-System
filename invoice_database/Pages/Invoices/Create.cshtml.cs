@@ -46,8 +46,8 @@ public class CreateModel : PageModel
         {
             InvoiceNo = Input.InvoiceNo,
             PaymentStatus = Input.PaymentStatus,
-            IssueDate = Input.IssueDate,
-            DueDate = Input.DueDate,
+            IssueDate = DateTime.SpecifyKind(Input.IssueDate, DateTimeKind.Utc),
+            DueDate = DateTime.SpecifyKind(Input.DueDate, DateTimeKind.Utc),
             ClientId = client.Id,
             CreatedAt = DateTime.UtcNow
         };

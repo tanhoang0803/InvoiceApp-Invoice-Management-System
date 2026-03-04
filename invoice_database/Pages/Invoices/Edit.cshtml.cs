@@ -68,8 +68,8 @@ public class EditModel : PageModel
         // Update invoice fields
         invoice.InvoiceNo = Input.InvoiceNo;
         invoice.PaymentStatus = Input.PaymentStatus;
-        invoice.IssueDate = Input.IssueDate;
-        invoice.DueDate = Input.DueDate;
+        invoice.IssueDate = DateTime.SpecifyKind(Input.IssueDate, DateTimeKind.Utc);
+        invoice.DueDate = DateTime.SpecifyKind(Input.DueDate, DateTimeKind.Utc);
 
         // Update client
         invoice.Client.Name = Input.ClientName;
