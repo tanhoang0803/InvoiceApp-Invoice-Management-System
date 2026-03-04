@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: invoiceapp
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ConnectionStrings__DefaultConnection
+        sync: false   # Set this manually in Render dashboard
