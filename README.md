@@ -2,7 +2,7 @@
 
 A full-stack web application for managing invoices, built with **ASP.NET Core Razor Pages (.NET 10)** and **PostgreSQL**. Supports the complete invoice lifecycle: create, view, edit, soft-delete, search, and paginate — with multi-service billing and client tracking.
 
-> **Live Demo:** [https://YOUR-APP.onrender.com](https://YOUR-APP.onrender.com)
+> **Live Demo:** [https://invoiceapp-invoice-management-system.onrender.com](https://invoiceapp-invoice-management-system.onrender.com)
 
 ---
 
