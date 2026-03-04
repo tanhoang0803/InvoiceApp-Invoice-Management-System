@@ -15,9 +15,12 @@ public class AppDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // Soft delete global query filter
+        // Soft delete global query filters
         modelBuilder.Entity<Invoice>()
             .HasQueryFilter(i => !i.IsDeleted);
+
+        modelBuilder.Entity<InvoiceService>()
+            .HasQueryFilter(s => !s.Invoice.IsDeleted);
 
         // Unique index on InvoiceNo
         modelBuilder.Entity<Invoice>()
