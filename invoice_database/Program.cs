@@ -1,6 +1,9 @@
 using invoice_database.Data;
 using Microsoft.EntityFrameworkCore;
 
+// Allow DateTime with any Kind for PostgreSQL timestamp columns (form dates come in as Unspecified)
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Render (and most PaaS) injects a PORT env variable — bind to it

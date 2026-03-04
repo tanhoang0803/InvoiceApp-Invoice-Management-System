@@ -72,7 +72,9 @@ public class CreateModel : PageModel
         {
             await _db.SaveChangesAsync();
         }
-        catch (DbUpdateException)
+        catch (DbUpdateException ex) when (ex.InnerException?.Message.Contains("unique") == true ||
+                                            ex.InnerException?.Message.Contains("duplicate") == true ||
+                                            ex.InnerException?.Message.Contains("23505") == true)
         {
             ModelState.AddModelError("Input.InvoiceNo", "Invoice number already exists. Please use a unique invoice number.");
             return Page();
