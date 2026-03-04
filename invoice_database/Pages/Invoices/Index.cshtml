@@ -22,7 +22,18 @@
 
 @if (!Model.Invoices.Any())
 {
-    <div class="alert alert-info">No invoices found.</div>
+    <div class="text-center py-5 text-muted">
+        <div class="fs-1 mb-2">📄</div>
+        @if (!string.IsNullOrEmpty(Model.Search))
+        {
+            <p>No invoices match "<strong>@Model.Search</strong>".</p>
+        }
+        else
+        {
+            <p class="mb-3">No invoices yet. Create your first one!</p>
+            <a asp-page="Create" class="btn btn-primary">+ New Invoice</a>
+        }
+    </div>
 }
 else
 {

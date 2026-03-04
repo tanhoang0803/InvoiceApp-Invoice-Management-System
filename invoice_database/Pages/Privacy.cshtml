@@ -1,8 +1,80 @@
-﻿@page
+@page
 @model PrivacyModel
 @{
     ViewData["Title"] = "Privacy Policy";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<h2>Privacy Policy</h2>
+<p class="text-muted">Effective date: March 2026</p>
+<hr />
+
+<div class="row">
+    <div class="col-lg-9">
+
+        <h5>1. Overview</h5>
+        <p>
+            InvoiceApp ("we", "our", or "the application") is committed to protecting the privacy and
+            security of the data you manage through this platform. This policy explains what data is
+            collected, how it is stored, and your rights regarding that data.
+        </p>
+
+        <h5>2. Data We Collect</h5>
+        <p>When you use InvoiceApp, the following data is stored in our database:</p>
+        <ul>
+            <li><strong>Invoice data</strong> — invoice numbers, issue dates, due dates, payment status, and total amounts</li>
+            <li><strong>Client data</strong> — client names, email addresses, phone numbers, and addresses</li>
+            <li><strong>Service data</strong> — service names, quantities, unit prices, and calculated totals</li>
+        </ul>
+        <p>We do <strong>not</strong> collect passwords, payment card numbers, or personal authentication credentials.</p>
+
+        <h5>3. How Data Is Used</h5>
+        <p>All data entered into InvoiceApp is used solely for the purpose of invoice management within the application. We do not:</p>
+        <ul>
+            <li>Sell or share your data with third parties</li>
+            <li>Use your data for advertising or profiling</li>
+            <li>Transfer data outside the application without your action</li>
+        </ul>
+
+        <h5>4. Data Storage &amp; Security</h5>
+        <ul>
+            <li>Data is stored in a <strong>PostgreSQL database</strong> hosted on <a href="https://neon.tech" target="_blank">Neon.tech</a> with SSL encryption in transit</li>
+            <li>The application is hosted on <a href="https://render.com" target="_blank">Render</a> over HTTPS</li>
+            <li>All forms are protected with <strong>Anti-Forgery tokens</strong> to prevent CSRF attacks</li>
+            <li>Database access uses <strong>Entity Framework Core</strong> parameterized queries to prevent SQL injection</li>
+            <li>Deleted invoices are <strong>soft-deleted</strong> (flagged, not permanently removed) to preserve data integrity</li>
+        </ul>
+
+        <h5>5. Data Retention</h5>
+        <p>
+            Data remains in the system until explicitly deleted by an authorized user.
+            Soft-deleted records are retained in the database but hidden from all views.
+        </p>
+
+        <h5>6. Your Rights</h5>
+        <p>As a user of this application, you have the right to:</p>
+        <ul>
+            <li>View all data entered into the system</li>
+            <li>Edit or correct any invoice, client, or service information</li>
+            <li>Delete invoices at any time</li>
+        </ul>
+
+        <h5>7. Cookies</h5>
+        <p>
+            InvoiceApp uses only <strong>session cookies</strong> required for form security (Anti-Forgery) and
+            temporary notifications (TempData). No tracking or analytics cookies are used.
+        </p>
+
+        <h5>8. Changes to This Policy</h5>
+        <p>
+            We may update this policy as the application evolves. The effective date at the top of this
+            page will reflect the most recent revision.
+        </p>
+
+        <h5>9. Contact</h5>
+        <p>
+            For any questions regarding this privacy policy or your data, please open an issue on the
+            <a href="https://github.com/tanhoang0803/InvoiceApp-Invoice-Management-System" target="_blank">GitHub repository</a>.
+        </p>
+
+    </div>
+</div>
