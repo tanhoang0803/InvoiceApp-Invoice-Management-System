@@ -1,0 +1,124 @@
+@page
+@model invoice_database.Pages.Invoices.IndexModel
+@{
+    ViewData["Title"] = "Invoices";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Invoices</h2>
+    <a asp-page="Create" class="btn btn-primary">+ New Invoice</a>
+</div>
+
+<form method="get" class="mb-3">
+    <div class="input-group" style="max-width: 400px;">
+        <input type="text" name="search" value="@Model.Search" class="form-control" placeholder="Search by invoice no or client..." />
+        <button type="submit" class="btn btn-outline-secondary">Search</button>
+        @if (!string.IsNullOrEmpty(Model.Search))
+        {
+            <a asp-page="Index" class="btn btn-outline-danger">Clear</a>
+        }
+    </div>
+</form>
+
+@if (!Model.Invoices.Any())
+{
+    <div class="alert alert-info">No invoices found.</div>
+}
+else
+{
+    <table class="table table-hover">
+        <thead class="table-light">
+            <tr>
+                <th>Invoice No</th>
+                <th>Status</th>
+                <th>Client</th>
+                <th>Total</th>
+                <th>Issue Date</th>
+                <th>Due Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var inv in Model.Invoices)
+            {
+                <tr>
+                    <td>@inv.InvoiceNo</td>
+                    <td>
+                        @if (inv.PaymentStatus == invoice_database.Models.PaymentStatus.Paid)
+                        {
+                            <span class="badge bg-success">Paid</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning text-dark">Pending</span>
+                        }
+                    </td>
+                    <td>@inv.Client.Name</td>
+                    <td>@inv.TotalAmount.ToString("C")</td>
+                    <td>@inv.IssueDate.ToString("yyyy-MM-dd")</td>
+                    <td>@inv.DueDate.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        <a asp-page="Details" asp-route-id="@inv.Id" class="btn btn-sm btn-outline-secondary">View</a>
+                        <a asp-page="Edit" asp-route-id="@inv.Id" class="btn btn-sm btn-outline-primary">Edit</a>
+                        <button type="button" class="btn btn-sm btn-outline-danger"
+                                data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                data-invoice-id="@inv.Id" data-invoice-no="@inv.InvoiceNo">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @if (Model.TotalPages > 1)
+    {
+        <nav>
+            <ul class="pagination">
+                @for (int p = 1; p <= Model.TotalPages; p++)
+                {
+                    <li class="page-item @(p == Model.CurrentPage ? "active" : "")">
+                        <a class="page-link" asp-page="Index" asp-route-page="@p" asp-route-search="@Model.Search">@p</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
+}
+
+<!-- Delete confirmation modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete invoice <strong id="deleteInvoiceNo"></strong>?
+                This action cannot be undone.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteForm" method="post">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const deleteModal = document.getElementById('deleteModal');
+        if (deleteModal) {
+            deleteModal.addEventListener('show.bs.modal', function (event) {
+                const btn = event.relatedTarget;
+                const invoiceId = btn.getAttribute('data-invoice-id');
+                const invoiceNo = btn.getAttribute('data-invoice-no');
+                document.getElementById('deleteInvoiceNo').textContent = invoiceNo;
+                document.getElementById('deleteForm').action =
+                    '?handler=Delete&id=' + invoiceId;
+            });
+        }
+    </script>
+}

@@ -1,0 +1,105 @@
+@page
+@model invoice_database.Pages.Invoices.CreateModel
+@{
+    ViewData["Title"] = "Create Invoice";
+}
+
+<h2>Create Invoice</h2>
+<hr />
+
+<form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+    <div class="row g-3 mb-4">
+        <h5 class="col-12">Invoice Details</h5>
+        <div class="col-md-4">
+            <label asp-for="Input.InvoiceNo" class="form-label"></label>
+            <input asp-for="Input.InvoiceNo" class="form-control" />
+            <span asp-validation-for="Input.InvoiceNo" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="Input.PaymentStatus" class="form-label"></label>
+            <select asp-for="Input.PaymentStatus" asp-items="Html.GetEnumSelectList<invoice_database.Models.PaymentStatus>()" class="form-select"></select>
+        </div>
+        <div class="col-md-2">
+            <label asp-for="Input.IssueDate" class="form-label"></label>
+            <input asp-for="Input.IssueDate" type="date" class="form-control" />
+        </div>
+        <div class="col-md-2">
+            <label asp-for="Input.DueDate" class="form-label"></label>
+            <input asp-for="Input.DueDate" type="date" class="form-control" />
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <h5 class="col-12">Client Information</h5>
+        <div class="col-md-6">
+            <label asp-for="Input.ClientName" class="form-label"></label>
+            <input asp-for="Input.ClientName" class="form-control" />
+            <span asp-validation-for="Input.ClientName" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Input.ClientEmail" class="form-label"></label>
+            <input asp-for="Input.ClientEmail" type="email" class="form-control" />
+            <span asp-validation-for="Input.ClientEmail" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Input.ClientPhone" class="form-label"></label>
+            <input asp-for="Input.ClientPhone" class="form-control" />
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Input.ClientAddress" class="form-label"></label>
+            <input asp-for="Input.ClientAddress" class="form-control" />
+        </div>
+    </div>
+
+    <div class="mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <h5 class="mb-0">Services</h5>
+            <button type="button" id="addRowBtn" class="btn btn-sm btn-outline-secondary">+ Add Row</button>
+        </div>
+
+        <table class="table table-bordered" id="servicesTable">
+            <thead class="table-light">
+                <tr>
+                    <th>Service Name</th>
+                    <th style="width:100px;">Qty</th>
+                    <th style="width:130px;">Unit Price</th>
+                    <th style="width:130px;">Total</th>
+                    <th style="width:60px;"></th>
+                </tr>
+            </thead>
+            <tbody id="servicesBody">
+                @for (int i = 0; i < Model.Input.Services.Count; i++)
+                {
+                    <tr class="service-row">
+                        <td>
+                            <input type="hidden" name="Input.Services[@i].Id" value="@Model.Input.Services[i].Id" />
+                            <input type="text" name="Input.Services[@i].ServiceName" value="@Model.Input.Services[i].ServiceName"
+                                   class="form-control service-name" required />
+                        </td>
+                        <td><input type="number" name="Input.Services[@i].Quantity" value="@Model.Input.Services[i].Quantity"
+                                   class="form-control service-qty" min="1" required /></td>
+                        <td><input type="number" name="Input.Services[@i].UnitPrice" value="@Model.Input.Services[i].UnitPrice"
+                                   class="form-control service-unit-price" min="0" step="0.01" required /></td>
+                        <td><input type="text" class="form-control service-row-total" readonly value="@Model.Input.Services[i].TotalPrice.ToString("F2")" /></td>
+                        <td><button type="button" class="btn btn-sm btn-danger remove-row">✕</button></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="text-end fw-bold">
+            Grand Total: <span id="grandTotal">0.00</span>
+        </div>
+    </div>
+
+    <div>
+        <button type="submit" class="btn btn-primary">Create</button>
+        <a asp-page="Index" class="btn btn-secondary ms-2">Cancel</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/invoice-services.js" asp-append-version="true"></script>
+}

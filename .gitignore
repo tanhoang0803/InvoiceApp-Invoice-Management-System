@@ -1,0 +1,16 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+.vscode/
+
+## EF Core migrations bundle
+*.bundle
+
+## User-specific settings
+appsettings.Development.json
+
+## Publish output
+publish/
